@@ -6,6 +6,7 @@ import PlayerBar from "../components/PlayerBar";
 import TrackList from "../components/TrackList";
 import AdBanner from "../components/AdBanner";
 import Equalizer from "../components/Equalizer";
+import LoopTimer from "../components/LoopTimer";
 
 const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
 const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
@@ -163,6 +164,7 @@ export default function Channel() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            <LoopTimer accentClass={channel.accent} textAccent={channel.textAccent} />
             <AdBanner variant="sidebar" />
             <AdBanner variant="sidebar" />
           </div>
