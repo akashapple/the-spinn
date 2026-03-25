@@ -7,8 +7,8 @@ import TrackList from "../components/TrackList";
 import AdBanner from "../components/AdBanner";
 import Equalizer from "../components/Equalizer";
 
-const JAZZ_IMG = "/__generating__/img_c5f8dcd8f59f.png";
-const RNB_IMG = "/__generating__/img_1b8fafa1c945.png";
+const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
+const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
 
 const CHANNEL_DATA = {
   jazz: {

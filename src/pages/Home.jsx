@@ -3,9 +3,9 @@ import { Radio, Disc3, Headphones } from "lucide-react";
 import ChannelCard from "../components/ChannelCard";
 import AdBanner from "../components/AdBanner";
 
-const JAZZ_IMG = "/__generating__/img_c5f8dcd8f59f.png";
-const RNB_IMG = "/__generating__/img_1b8fafa1c945.png";
-const HERO_IMG = "/__generating__/img_b4dce9577919.png";
+const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
+const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
+const HERO_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/502647789_generated_1f43b1cd.png";
 
 export default function Home() {
   return (
