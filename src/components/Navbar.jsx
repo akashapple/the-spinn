@@ -12,8 +12,8 @@ export default function Navbar() {
             <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
               <Radio className="w-4 h-4 text-primary" />
             </div>
-            <span className="font-display text-xl font-semibold tracking-tight text-foreground">
-              SoulWave
+            <span className="font-display text-xl font-semibold tracking-tight text-foreground">Rico's Relaxation Revolution
+
             </span>
           </Link>
 
@@ -21,21 +21,21 @@ export default function Navbar() {
             <Link
               to="/channel/jazz"
               className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
-                location.pathname === "/channel/jazz"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-              }`}
-            >
+              location.pathname === "/channel/jazz" ?
+              "bg-primary text-primary-foreground" :
+              "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
+              }>
+              
               Jazz
             </Link>
             <Link
               to="/channel/rnb"
               className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
-                location.pathname === "/channel/rnb"
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-              }`}
-            >
+              location.pathname === "/channel/rnb" ?
+              "bg-accent text-accent-foreground" :
+              "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
+              }>
+              
               R&B
             </Link>
           </div>
@@ -47,6 +47,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </nav>
-  );
+    </nav>);
+
 }
