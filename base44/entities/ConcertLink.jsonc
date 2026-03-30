@@ -1,0 +1,35 @@
+{
+  "name": "ConcertLink",
+  "type": "object",
+  "properties": {
+    "artist": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "jazz",
+        "rnb"
+      ]
+    },
+    "venue": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "ticket_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "artist",
+    "channel",
+    "venue",
+    "date",
+    "ticket_url"
+  ]
+}

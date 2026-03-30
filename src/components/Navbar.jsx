@@ -36,7 +36,7 @@ Digital Streams
               "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
               }>
               
-              R&B
+              Neo Soul & R&B
             </Link>
           </div>
 

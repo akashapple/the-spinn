@@ -35,7 +35,7 @@ export default function Home() {
               <span className="block text-primary italic"> Rhythm</span>
             </h1>
             <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Two curated channels of the finest Jazz and R&B — handpicked by tastemakers, 
+              Two curated channels of the finest Jazz and Neo Soul & R&B — handpicked by tastemakers, 
               streaming live 24/7 for the soul.
             </p>
           </motion.div>
@@ -85,7 +85,7 @@ export default function Home() {
               isActive={false}
             />
             <ChannelCard
-              name="R&B"
+              name="Neo Soul & R&B"
               genre="Neo-Soul • Classic R&B • Contemporary"
               image={RNB_IMG}
               path="/channel/rnb"

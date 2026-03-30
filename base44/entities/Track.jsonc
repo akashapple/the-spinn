@@ -1,0 +1,31 @@
+{
+  "name": "Track",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "jazz",
+        "rnb"
+      ]
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "artist",
+    "channel",
+    "file_url"
+  ]
+}

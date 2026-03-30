@@ -22,42 +22,44 @@ const RNB_TRACKS = [
   { title: "Ocean Drive", artist: "Smooth Collective", duration: "4:08" },
 ];
 
-export default function TrackList({ channel }) {
-  const tracks = channel === "jazz" ? JAZZ_TRACKS : RNB_TRACKS;
+export default function TrackList({ channel, customTracks = [], currentIndex = -1, onSelect }) {
+  const staticTracks = channel === "jazz" ? JAZZ_TRACKS : RNB_TRACKS;
+  const hasCustom = customTracks.length > 0;
+  const tracks = hasCustom ? customTracks : staticTracks;
   const accentClass = channel === "jazz" ? "text-primary" : "text-accent";
 
   return (
     <div className="rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-border/50 flex items-center justify-between">
-        <h3 className="font-display text-lg font-semibold text-foreground">Up Next</h3>
+        <h3 className="font-display text-lg font-semibold text-foreground">
+          {hasCustom ? "Playlist" : "Up Next"}
+        </h3>
         <Clock className="w-4 h-4 text-muted-foreground" />
       </div>
       <div className="divide-y divide-border/30">
-        {tracks.map((track, i) => (
-          <div
-            key={i}
-            className={`px-5 py-3.5 flex items-center justify-between hover:bg-secondary/50 transition-colors cursor-pointer ${
-              track.isNowPlaying ? "bg-secondary/70" : ""
-            }`}
-          >
-            <div className="flex items-center gap-3 min-w-0">
-              <span className={`text-xs font-body w-5 text-center ${track.isNowPlaying ? accentClass : "text-muted-foreground"}`}>
-                {track.isNowPlaying ? (
-                  <Music className="w-3.5 h-3.5 inline" />
-                ) : (
-                  i + 1
-                )}
-              </span>
-              <div className="min-w-0">
-                <p className={`text-sm font-body font-medium truncate ${track.isNowPlaying ? accentClass : "text-foreground"}`}>
-                  {track.title}
-                </p>
-                <p className="text-xs font-body text-muted-foreground truncate">{track.artist}</p>
+        {tracks.map((track, i) => {
+          const isActive = hasCustom ? i === currentIndex : track.isNowPlaying;
+          return (
+            <div
+              key={i}
+              onClick={() => hasCustom && onSelect && onSelect(i)}
+              className={`px-5 py-3.5 flex items-center justify-between hover:bg-secondary/50 transition-colors cursor-pointer ${isActive ? "bg-secondary/70" : ""}`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <span className={`text-xs font-body w-5 text-center ${isActive ? accentClass : "text-muted-foreground"}`}>
+                  {isActive ? <Music className="w-3.5 h-3.5 inline" /> : i + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className={`text-sm font-body font-medium truncate ${isActive ? accentClass : "text-foreground"}`}>
+                    {track.title}
+                  </p>
+                  <p className="text-xs font-body text-muted-foreground truncate">{track.artist}</p>
+                </div>
               </div>
+              <span className="text-xs font-body text-muted-foreground ml-3 flex-shrink-0">{track.duration || ""}</span>
             </div>
-            <span className="text-xs font-body text-muted-foreground ml-3 flex-shrink-0">{track.duration}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

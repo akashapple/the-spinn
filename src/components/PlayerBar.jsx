@@ -69,7 +69,7 @@ export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTo
               className="w-24"
             />
             <span className={`text-xs font-body font-medium ${textAccent} uppercase tracking-wider`}>
-              {isJazz ? "Jazz" : "R&B"}
+              {isJazz ? "Jazz" : "Neo Soul & R&B"}
             </span>
           </div>
         </div>

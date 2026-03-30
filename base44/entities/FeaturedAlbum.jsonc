@@ -1,0 +1,37 @@
+{
+  "name": "FeaturedAlbum",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "jazz",
+        "rnb"
+      ]
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "year": {
+      "type": "string"
+    },
+    "review": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "title",
+    "artist",
+    "channel",
+    "review"
+  ]
+}
