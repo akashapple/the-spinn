@@ -1,0 +1,21 @@
+{
+  "name": "ChannelChat",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "author_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "channel",
+    "message",
+    "author_name"
+  ]
+}
