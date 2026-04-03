@@ -22,8 +22,19 @@ const RNB_TRACKS = [
   { title: "Ocean Drive", artist: "Smooth Collective", duration: "4:08" },
 ];
 
+const WORLDBEAT_TRACKS = [
+  { title: "African Sun", artist: "World Beat Radio", duration: "4:45", isNowPlaying: true },
+  { title: "Lagos Nights", artist: "Femi Groove", duration: "5:02" },
+  { title: "Cumbia del Mar", artist: "Los Ritmos", duration: "3:58" },
+  { title: "Kora Dream", artist: "Toumani Collective", duration: "6:14" },
+  { title: "Carnival Pulse", artist: "Steel Pan Express", duration: "4:30" },
+  { title: "Samba Soul", artist: "Rio Groove", duration: "3:47" },
+  { title: "Djembe Fire", artist: "West Africa All Stars", duration: "5:55" },
+  { title: "Reggae Sunrise", artist: "Island Vibrations", duration: "4:22" },
+];
+
 export default function TrackList({ channel, customTracks = [], currentIndex = -1, onSelect }) {
-  const staticTracks = channel === "jazz" ? JAZZ_TRACKS : RNB_TRACKS;
+  const staticTracks = channel === "jazz" ? JAZZ_TRACKS : channel === "rnb" ? RNB_TRACKS : WORLDBEAT_TRACKS;
   const hasCustom = customTracks.length > 0;
   const tracks = hasCustom ? customTracks : staticTracks;
   const accentClass = channel === "jazz" ? "text-primary" : "text-accent";

@@ -17,6 +17,8 @@ import AddTrackModal from "../components/AddTrackModal";
 const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
 const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
 
+const WORLDBEAT_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/4eb7cacb6_generated_image.png";
+
 const CHANNEL_DATA = {
   jazz: {
     name: "Jazz Channel",
@@ -39,6 +41,17 @@ const CHANNEL_DATA = {
     listeners: "3,128",
     accent: "bg-accent",
     textAccent: "text-accent",
+  },
+  worldbeat: {
+    name: "World Beat",
+    tagline: "Rhythms from every corner of the earth",
+    description: "A global journey through Afrobeat, Latin grooves, Caribbean rhythms, West African percussion, and beyond. World Beat brings you the pulse of humanity — raw, vibrant, and unstoppable.",
+    image: WORLDBEAT_IMG,
+    nowPlaying: "African Sun",
+    artist: "World Beat Radio",
+    listeners: "1,842",
+    accent: "bg-chart-3",
+    textAccent: "text-chart-3",
   },
 };
 

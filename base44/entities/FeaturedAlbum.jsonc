@@ -12,7 +12,8 @@
       "type": "string",
       "enum": [
         "jazz",
-        "rnb"
+        "rnb",
+        "worldbeat"
       ]
     },
     "image_url": {
