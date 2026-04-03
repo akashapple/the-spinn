@@ -12,8 +12,8 @@ export default function Navbar() {
             <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
               <Radio className="w-4 h-4 text-primary" />
             </div>
-            <span className="bg-[hsl(var(--sidebar-border))] text-[hsl(var(--primary))] text-lg font-black text-left underline tracking-tight">THE SPINN
-Digital Streams
+            <span className="bg-[hsl(var(--sidebar-border))] text-[hsl(var(--primary))] text-lg font-black text-left underline tracking-tight">THE SPINN int
+
             </span>
           </Link>
 
@@ -37,15 +37,6 @@ Digital Streams
               }>
               
               Neo Soul & R&B
-            </Link>
-            <Link
-              to="/channel/worldbeat"
-              className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
-              location.pathname === "/channel/worldbeat" ?
-              "bg-chart-3 text-white" :
-              "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
-              }>
-              World Beat
             </Link>
           </div>
 
