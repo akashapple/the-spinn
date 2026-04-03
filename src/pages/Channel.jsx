@@ -62,8 +62,8 @@ function playWelcomeVoice() {
 
 export default function Channel() {
   const { id } = useParams();
-  const { currentUser } = useAuth();
-  const isAdmin = currentUser?.role === "admin";
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [liked, setLiked] = useState(false);

@@ -4,8 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function ConcertLinks({ channelId, textAccent, accentClass }) {
-  const { currentUser } = useAuth();
-  const isAdmin = currentUser?.role === "admin";
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
   const [concerts, setConcerts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ artist: "", venue: "", city: "", date: "", ticket_url: "" });

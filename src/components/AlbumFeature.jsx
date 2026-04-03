@@ -4,8 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function AlbumFeature({ channelId, textAccent, accentClass }) {
-  const { currentUser } = useAuth();
-  const isAdmin = currentUser?.role === "admin";
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
   const [albums, setAlbums] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: "", artist: "", year: "", review: "", rating: 5, image_url: "" });
