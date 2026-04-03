@@ -34,7 +34,7 @@ export default function Home() {
               Feel the
               <span className="block text-primary italic"> Rhythm</span>
             </h1>
-            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">Jazz,Neo Soul & R&B 
+            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">Jazz,Neo Soul & R&B and World Beat music!
 
 
             </p>
