@@ -22,8 +22,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+            className="text-center max-w-3xl mx-auto">
+            
             <div className="flex items-center justify-center gap-2 mb-6">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-xs font-body text-primary uppercase tracking-[0.2em] font-medium">
@@ -34,9 +34,9 @@ export default function Home() {
               Feel the
               <span className="block text-primary italic"> Rhythm</span>
             </h1>
-            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Two curated channels of the finest Jazz and Neo Soul & R&B — handpicked by tastemakers, 
-              streaming live 24/7 for the soul.
+            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">Jazz,R
+
+
             </p>
           </motion.div>
 
@@ -45,18 +45,18 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex items-center justify-center gap-8 sm:gap-16 mt-12"
-          >
+            className="flex items-center justify-center gap-8 sm:gap-16 mt-12">
+            
             {[
-              { icon: Radio, label: "2 Live Channels", value: "" },
-              { icon: Disc3, label: "24/7 Streaming", value: "" },
-              { icon: Headphones, label: "Hi-Fi Quality", value: "" },
-            ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
+            { icon: Radio, label: "2 Live Channels", value: "" },
+            { icon: Disc3, label: "24/7 Streaming", value: "" },
+            { icon: Headphones, label: "Hi-Fi Quality", value: "" }].
+            map((stat, i) =>
+            <div key={i} className="flex flex-col items-center gap-2">
                 <stat.icon className="w-5 h-5 text-primary" />
                 <span className="text-xs font-body text-muted-foreground tracking-wider uppercase">{stat.label}</span>
               </div>
-            ))}
+            )}
           </motion.div>
         </div>
       </section>
@@ -82,8 +82,8 @@ export default function Home() {
               path="/channel/jazz"
               accentColor="bg-primary"
               listeners="2.4K"
-              isActive={false}
-            />
+              isActive={false} />
+            
             <ChannelCard
               name="Neo Soul & R&B"
               genre="Neo-Soul • Classic R&B • Contemporary"
@@ -91,8 +91,8 @@ export default function Home() {
               path="/channel/rnb"
               accentColor="bg-accent"
               listeners="3.1K"
-              isActive={false}
-            />
+              isActive={false} />
+            
           </div>
 
           {/* Sidebar Ad */}
@@ -133,6 +133,6 @@ export default function Home() {
           </p>
         </div>
       </footer>
-    </div>
-  );
+    </div>);
+
 }
