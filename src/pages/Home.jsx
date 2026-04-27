@@ -113,7 +113,7 @@ export default function Home() {
           <h2 className="font-display text-3xl font-semibold text-foreground mb-4">
             Crafted for Connoisseurs
           </h2>
-          <p className="font-body text-muted-foreground max-w-2xl mx-auto leading-relaxed"> The SPINN more than a radio station — it's a sanctuary for music lovers. Our channels are curated by passionate DJs who breathe Jazz,  delivering an uninterrupted stream of timeless classics and fresh discoveries
+          <p className="font-body text-muted-foreground max-w-2xl mx-auto leading-relaxed"> SoulThe SPINN more than a radio station — it's a sanctuary for music lovers. Our channels are curated by passionate DJs who breathe Jazz, Neo delivering an uninterrupted stream of timeless classics and fresh discoveries
 
 
 
