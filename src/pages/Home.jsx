@@ -126,7 +126,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-primary" />
-            <span className="font-display text-sm text-foreground">Th</span>
+            <span className="font-display text-sm text-foreground">The S</span>
           </div>
           <p className="text-xs font-body text-muted-foreground">© 2026 TheSPINN Radio. All rights reserved.
 
