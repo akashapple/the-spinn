@@ -5,6 +5,7 @@ import AdBanner from "../components/AdBanner";
 
 const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
 const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
+const WORLDBEAT_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/4eb7cacb6_generated_image.png";
 const HERO_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/502647789_generated_1f43b1cd.png";
 
 export default function Home() {
@@ -34,9 +35,8 @@ export default function Home() {
               Feel the
               <span className="block text-primary italic"> Rhythm</span>
             </h1>
-            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">Jazz,Neo Soul & R&B and World Beat music!
-
-
+            <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              Jazz, Neo Soul &amp; R&B, and World Beat — three channels, one sanctuary for music lovers.
             </p>
           </motion.div>
 
@@ -48,7 +48,7 @@ export default function Home() {
             className="flex items-center justify-center gap-8 sm:gap-16 mt-12">
             
             {[
-            { icon: Radio, label: "2 Live Channels", value: "" },
+            { icon: Radio, label: "3 Live Channels", value: "" },
             { icon: Disc3, label: "24/7 Streaming", value: "" },
             { icon: Headphones, label: "Hi-Fi Quality", value: "" }].
             map((stat, i) =>
@@ -92,7 +92,15 @@ export default function Home() {
               accentColor="bg-accent"
               listeners="3.1K"
               isActive={false} />
-            
+
+            <ChannelCard
+              name="World Beat"
+              genre="Afrobeat • Latin • Caribbean • West African"
+              image={WORLDBEAT_IMG}
+              path="/channel/worldbeat"
+              accentColor="bg-chart-3"
+              listeners="1.8K"
+              isActive={false} />
           </div>
 
           {/* Sidebar Ad */}
