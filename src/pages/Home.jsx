@@ -128,7 +128,7 @@ export default function Home() {
             <Radio className="w-4 h-4 text-primary" />
             <span className="font-display text-sm text-foreground">SoulWave</span>
           </div>
-          <p className="text-xs font-body text-muted-foreground">© 2026 TheS Radio. All rights reserved.
+          <p className="text-xs font-body text-muted-foreground">© 2026 TheSPINN Radio. All rights reserved.
 
           </p>
         </div>
