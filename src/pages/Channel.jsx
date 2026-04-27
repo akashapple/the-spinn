@@ -45,10 +45,10 @@ const CHANNEL_DATA = {
   worldbeat: {
     name: "World Beat",
     tagline: "Close your eyes and drift away",
-    description: "A soothing global journey through Afrobeat, Latin grooves, Caribbean rhythms, West African kora, and beyond. World Beat is your escape — warm, hypnotic, and endlessly relaxing. Let the rhythms of the earth carry you somewhere beautiful.",
+    description: "Your third live channel — a soothing global journey through Afrobeat, Latin grooves, Caribbean rhythms, West African kora, and beyond. World Beat is your escape — warm, hypnotic, and endlessly relaxing. Let the rhythms of the earth carry you somewhere beautiful.",
     image: WORLDBEAT_IMG,
-    nowPlaying: "African Sun",
-    artist: "World Beat Radio",
+    nowPlaying: "Kora Dream",
+    artist: "Toumani Collective",
     listeners: "1,842",
     accent: "bg-chart-3",
     textAccent: "text-chart-3",

@@ -23,14 +23,14 @@ const RNB_TRACKS = [
 ];
 
 const WORLDBEAT_TRACKS = [
-  { title: "African Sun", artist: "World Beat Radio", duration: "4:45", isNowPlaying: true },
-  { title: "Lagos Nights", artist: "Femi Groove", duration: "5:02" },
-  { title: "Cumbia del Mar", artist: "Los Ritmos", duration: "3:58" },
-  { title: "Kora Dream", artist: "Toumani Collective", duration: "6:14" },
-  { title: "Carnival Pulse", artist: "Steel Pan Express", duration: "4:30" },
-  { title: "Samba Soul", artist: "Rio Groove", duration: "3:47" },
-  { title: "Djembe Fire", artist: "West Africa All Stars", duration: "5:55" },
-  { title: "Reggae Sunrise", artist: "Island Vibrations", duration: "4:22" },
+  { title: "Kora Dream", artist: "Toumani Collective", duration: "6:14", isNowPlaying: true },
+  { title: "Sahara Breeze", artist: "Desert Nomads", duration: "5:33" },
+  { title: "Island Lullaby", artist: "Caribbean Souls", duration: "4:48" },
+  { title: "Bamboo Rain", artist: "Asian Groove Collective", duration: "5:20" },
+  { title: "Gentle Cumbia", artist: "Los Ritmos Suaves", duration: "4:02" },
+  { title: "Bali Sunset", artist: "Gamelan Drift", duration: "6:45" },
+  { title: "Niger Delta Flow", artist: "West Africa All Stars", duration: "5:10" },
+  { title: "Marrakech Moonrise", artist: "Gnawa Echoes", duration: "7:01" },
 ];
 
 export default function TrackList({ channel, customTracks = [], currentIndex = -1, onSelect }) {
