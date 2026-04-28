@@ -55,23 +55,7 @@ const CHANNEL_DATA = {
   },
 };
 
-// Welcome voice intro using Web Speech API
-function playWelcomeVoice() {
-  if (!window.speechSynthesis) return;
-  const msg = new SpeechSynthesisUtterance(
-    "Welcome. Sit back and let us take it from here. Rico Werks presents The Spinn Digital Radio."
-  );
-  const voices = window.speechSynthesis.getVoices();
-  // Prefer a female voice
-  const female = voices.find(v =>
-    /female|woman|girl|zira|samantha|victoria|fiona|moira|tessa|karen|veena|allison|ava|susan|kate/i.test(v.name)
-  );
-  if (female) msg.voice = female;
-  msg.pitch = 0.9;
-  msg.rate = 0.85;
-  msg.volume = 1;
-  window.speechSynthesis.speak(msg);
-}
+
 
 export default function Channel() {
   const { id } = useParams();
@@ -83,7 +67,7 @@ export default function Channel() {
   const [customTracks, setCustomTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [hasPlayedIntro, setHasPlayedIntro] = useState(false);
+
   const audioRef = useRef(null);
 
   const channel = CHANNEL_DATA[id] || CHANNEL_DATA.jazz;
@@ -94,13 +78,7 @@ export default function Channel() {
       .then(setCustomTracks);
   }, [id]);
 
-  // Ensure voices are loaded before first play
-  useEffect(() => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
-  }, []);
+
 
   // Audio: handle play/pause and auto-advance
   useEffect(() => {
@@ -135,15 +113,6 @@ export default function Channel() {
 
   const handleTogglePlay = () => {
     const audio = audioRef.current;
-    if (!hasPlayedIntro) {
-      setHasPlayedIntro(true);
-      playWelcomeVoice();
-      setTimeout(() => {
-        setIsPlaying(true);
-        if (audio && customTracks.length > 0) audio.play();
-      }, 4500);
-      return;
-    }
     if (!isPlaying) {
       setIsPlaying(true);
       if (audio && customTracks.length > 0) audio.play();
