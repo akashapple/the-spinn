@@ -57,6 +57,21 @@ const CHANNEL_DATA = {
 
 
 
+function playStationID() {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const msg = new SpeechSynthesisUtterance("The Spinn... digital radio.");
+  const voices = window.speechSynthesis.getVoices();
+  const relaxed = voices.find(v =>
+    /samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|kate|zira/i.test(v.name)
+  ) || voices.find(v => v.lang.startsWith("en") && v.localService);
+  if (relaxed) msg.voice = relaxed;
+  msg.pitch = 0.85;
+  msg.rate = 0.75;
+  msg.volume = 0.85;
+  window.speechSynthesis.speak(msg);
+}
+
 export default function Channel() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -67,10 +82,20 @@ export default function Channel() {
   const [customTracks, setCustomTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
+  const songsSinceIDRef = useRef(0);
+  const hasPlayedIntroRef = useRef(false);
 
   const audioRef = useRef(null);
 
   const channel = CHANNEL_DATA[id] || CHANNEL_DATA.jazz;
+
+  // Preload voices
+  useEffect(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+  }, []);
 
   // Load custom tracks
   useEffect(() => {
@@ -93,8 +118,16 @@ export default function Channel() {
     }
 
     const handleEnded = () => {
-      const next = (currentTrackIndex + 1) % customTracks.length;
-      setCurrentTrackIndex(next);
+      songsSinceIDRef.current += 1;
+      if (songsSinceIDRef.current >= 14) {
+        songsSinceIDRef.current = 0;
+        playStationID();
+        setTimeout(() => {
+          setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
+        }, 3000);
+      } else {
+        setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
+      }
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
@@ -114,6 +147,16 @@ export default function Channel() {
   const handleTogglePlay = () => {
     const audio = audioRef.current;
     if (!isPlaying) {
+      // Play station ID on first play
+      if (!hasPlayedIntroRef.current) {
+        hasPlayedIntroRef.current = true;
+        playStationID();
+        setTimeout(() => {
+          setIsPlaying(true);
+          if (audio && customTracks.length > 0) audio.play();
+        }, 3000);
+        return;
+      }
       setIsPlaying(true);
       if (audio && customTracks.length > 0) audio.play();
     } else {
