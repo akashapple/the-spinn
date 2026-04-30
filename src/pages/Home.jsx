@@ -48,7 +48,7 @@ export default function Home() {
             className="flex items-center justify-center gap-8 sm:gap-16 mt-12">
             
             {[
-            { icon: Radio, label: "2 Live Channels", value: "" },
+            { icon: Radio, label: "3 Live Channels", value: "" },
             { icon: Disc3, label: "24/7 Streaming", value: "" },
             { icon: Headphones, label: "Hi-Fi Quality", value: "" }].
             map((stat, i) =>

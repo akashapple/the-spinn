@@ -57,18 +57,75 @@ const CHANNEL_DATA = {
 
 
 
-function playStationID() {
-  if (!window.speechSynthesis) return;
+function speakUtterance(text, lang, pitch, rate, volume, genderHint) {
+  return new Promise((resolve) => {
+    const synth = window.speechSynthesis;
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = lang;
+    utt.pitch = pitch;
+    utt.rate = rate;
+    utt.volume = volume;
+
+    const voices = synth.getVoices();
+    // Try to find a voice matching language and gender hint
+    let voice = voices.find(v => v.lang.startsWith(lang.split('-')[0]) && (
+      genderHint === 'female'
+        ? /female|woman|girl|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|kate|zira|amelie|marie|paulette|céleste|mei|li|google uk english female/i.test(v.name)
+        : /male|man|google uk english male|daniel|thomas|jorge|carlos|diego|wei|chen/i.test(v.name)
+    ));
+    // fallback: any voice for that language
+    if (!voice) voice = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+    if (voice) utt.voice = voice;
+
+    utt.onend = () => resolve();
+    utt.onerror = () => resolve();
+    synth.speak(utt);
+  });
+}
+
+async function playWelcomeIntro(onDone) {
+  if (!window.speechSynthesis) { onDone && onDone(); return; }
+  window.speechSynthesis.cancel();
+
+  // 1. English – Black woman, Northeast American, energetic & warm
+  await speakUtterance("Welcome to The Spin!", "en-US", 1.2, 0.95, 1.0, 'female');
+  await speakUtterance("Welcome to The Spin!", "en-US", 1.25, 1.0, 1.0, 'female');
+
+  // 2. Mandarin – Happy man
+  await speakUtterance("欢迎来到 The Spin！", "zh-CN", 1.2, 1.0, 1.0, 'male');
+
+  // 3. French – Happy woman
+  await speakUtterance("Bienvenue sur The Spin !", "fr-FR", 1.2, 1.0, 1.0, 'female');
+
+  // 4. Swahili – Laughing Kenyan woman
+  await speakUtterance("Karibu The Spin! Ha ha ha!", "sw-KE", 1.3, 1.05, 1.0, 'female');
+
+  // 5. Spanish – Romantic laughing Madrid man
+  await speakUtterance("¡Bienvenidos a The Spin! Jaja, qué alegría!", "es-ES", 1.15, 0.95, 1.0, 'male');
+
+  // Closing – Pleasant female English voice
+  await speakUtterance("Twenty-four hour streaming.", "en-GB", 1.1, 0.85, 0.95, 'female');
+
+  // All laughing together
+  await speakUtterance("Ha ha ha ha ha ha ha!", "en-US", 1.3, 1.1, 1.0, 'female');
+
+  onDone && onDone();
+}
+
+function playStationID(onDone) {
+  if (!window.speechSynthesis) { onDone && onDone(); return; }
   window.speechSynthesis.cancel();
   const msg = new SpeechSynthesisUtterance("The Spinn... digital radio.");
   const voices = window.speechSynthesis.getVoices();
-  const relaxed = voices.find(v =>
+  const v = voices.find(v =>
     /samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|kate|zira/i.test(v.name)
   ) || voices.find(v => v.lang.startsWith("en") && v.localService);
-  if (relaxed) msg.voice = relaxed;
+  if (v) msg.voice = v;
   msg.pitch = 0.85;
   msg.rate = 0.75;
   msg.volume = 0.85;
+  msg.onend = () => onDone && onDone();
+  msg.onerror = () => onDone && onDone();
   window.speechSynthesis.speak(msg);
 }
 
@@ -121,10 +178,9 @@ export default function Channel() {
       songsSinceIDRef.current += 1;
       if (songsSinceIDRef.current >= 14) {
         songsSinceIDRef.current = 0;
-        playStationID();
-        setTimeout(() => {
+        playStationID(() => {
           setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
-        }, 3000);
+        });
       } else {
         setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
       }
@@ -147,14 +203,13 @@ export default function Channel() {
   const handleTogglePlay = () => {
     const audio = audioRef.current;
     if (!isPlaying) {
-      // Play station ID on first play
+      // Play full multilingual intro on first play
       if (!hasPlayedIntroRef.current) {
         hasPlayedIntroRef.current = true;
-        playStationID();
-        setTimeout(() => {
+        playWelcomeIntro(() => {
           setIsPlaying(true);
           if (audio && customTracks.length > 0) audio.play();
-        }, 3000);
+        });
         return;
       }
       setIsPlaying(true);
