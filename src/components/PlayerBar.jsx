@@ -1,16 +1,38 @@
-import { useState } from "react";
-import { Play, Pause, Volume2, VolumeX, SkipForward } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { motion, AnimatePresence } from "framer-motion";
 import Equalizer from "./Equalizer";
 
-export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTogglePlay }) {
-  const [volume, setVolume] = useState([75]);
+const CHANNEL_LABELS = {
+  jazz: "Jazz",
+  rnb: "Neo Soul & R&B",
+  worldbeat: "World Beat",
+};
+
+export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTogglePlay, audioRef }) {
+  const [volume, setVolume] = useState([85]);
   const [isMuted, setIsMuted] = useState(false);
 
   const isJazz = channel === "jazz";
-  const accentClass = isJazz ? "bg-primary" : "bg-accent";
-  const textAccent = isJazz ? "text-primary" : "text-accent";
+  const accentClass = isJazz ? "bg-primary" : channel === "worldbeat" ? "bg-chart-3" : "bg-accent";
+  const textAccent = isJazz ? "text-primary" : channel === "worldbeat" ? "text-chart-3" : "text-accent";
+
+  // Wire volume slider to the real audio element
+  useEffect(() => {
+    const audio = audioRef?.current;
+    if (!audio) return;
+    audio.volume = isMuted ? 0 : volume[0] / 100;
+  }, [volume, isMuted, audioRef]);
+
+  const handleVolumeChange = (val) => {
+    setVolume(val);
+    setIsMuted(val[0] === 0);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(prev => !prev);
+  };
 
   return (
     <motion.div
@@ -58,18 +80,18 @@ export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTo
 
           {/* Volume */}
           <div className="hidden sm:flex items-center gap-3 flex-1 justify-end">
-            <button onClick={() => setIsMuted(!isMuted)} className="text-muted-foreground hover:text-foreground transition-colors">
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
+              {isMuted || volume[0] === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>
             <Slider
               value={isMuted ? [0] : volume}
-              onValueChange={setVolume}
+              onValueChange={handleVolumeChange}
               max={100}
               step={1}
               className="w-24"
             />
             <span className={`text-xs font-body font-medium ${textAccent} uppercase tracking-wider`}>
-              {isJazz ? "Jazz" : "Neo Soul & R&B"}
+              {CHANNEL_LABELS[channel] || "Live"}
             </span>
           </div>
         </div>

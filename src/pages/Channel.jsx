@@ -87,9 +87,8 @@ async function playWelcomeIntro(onDone) {
   if (!window.speechSynthesis) { onDone && onDone(); return; }
   window.speechSynthesis.cancel();
 
-  // 1. English – Black woman, Northeast American, energetic & warm
+  // 1. English – Black woman, Northeast American, energetic & warm (once only)
   await speakUtterance("Welcome to The Spin!", "en-US", 1.2, 0.95, 1.0, 'female');
-  await speakUtterance("Welcome to The Spin!", "en-US", 1.25, 1.0, 1.0, 'female');
 
   // 2. Mandarin – Happy man
   await speakUtterance("欢迎来到 The Spin！", "zh-CN", 1.2, 1.0, 1.0, 'male');
@@ -106,8 +105,8 @@ async function playWelcomeIntro(onDone) {
   // Closing – Pleasant female English voice
   await speakUtterance("Twenty-four hour streaming.", "en-GB", 1.1, 0.85, 0.95, 'female');
 
-  // All laughing together
-  await speakUtterance("Ha ha ha ha ha ha ha!", "en-US", 1.3, 1.1, 1.0, 'female');
+  // All voices together saying "Enjoy!"
+  await speakUtterance("Enjoy! Enjoy! Enjoy! Enjoy! Enjoy!", "en-US", 1.3, 1.1, 1.0, 'female');
 
   onDone && onDone();
 }
@@ -351,6 +350,7 @@ export default function Channel() {
         artist={trackArtist}
         isPlaying={isPlaying}
         onTogglePlay={handleTogglePlay}
+        audioRef={audioRef}
       />
     </div>
   );
