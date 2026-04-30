@@ -30,7 +30,7 @@ export default function Home() {
                 Now Streaming
               </span>
             </div>
-            <h1 className="font-display text-5xl sm:text-7xl font-bold text-foreground leading-[0.9] mb-6">Enj
+            <h1 className="font-display text-5xl sm:text-7xl font-bold text-foreground leading-[0.9] mb-6">Enjoy the Ride!
 
 
             </h1>
