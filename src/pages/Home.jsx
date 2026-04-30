@@ -30,9 +30,9 @@ export default function Home() {
                 Now Streaming
               </span>
             </div>
-            <h1 className="font-display text-5xl sm:text-7xl font-bold text-foreground leading-[0.9] mb-6">
-              Feel the
-              <span className="block text-primary italic">FORCE</span>
+            <h1 className="font-display text-5xl sm:text-7xl font-bold text-foreground leading-[0.9] mb-6">Enj
+
+
             </h1>
             <p className="font-body text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">Jazz,Neo Soul & R&B and World Beat music!
 
