@@ -57,76 +57,7 @@ const CHANNEL_DATA = {
 
 
 
-function speakUtterance(text, lang, pitch, rate, volume, genderHint) {
-  return new Promise((resolve) => {
-    const synth = window.speechSynthesis;
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = lang;
-    utt.pitch = pitch;
-    utt.rate = rate;
-    utt.volume = volume;
 
-    const voices = synth.getVoices();
-    // Try to find a voice matching language and gender hint
-    let voice = voices.find(v => v.lang.startsWith(lang.split('-')[0]) && (
-      genderHint === 'female'
-        ? /female|woman|girl|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|kate|zira|amelie|marie|paulette|céleste|mei|li|google uk english female/i.test(v.name)
-        : /male|man|google uk english male|daniel|thomas|jorge|carlos|diego|wei|chen/i.test(v.name)
-    ));
-    // fallback: any voice for that language
-    if (!voice) voice = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
-    if (voice) utt.voice = voice;
-
-    utt.onend = () => resolve();
-    utt.onerror = () => resolve();
-    synth.speak(utt);
-  });
-}
-
-async function playWelcomeIntro(onDone) {
-  if (!window.speechSynthesis) { onDone && onDone(); return; }
-  window.speechSynthesis.cancel();
-
-  // 1. English – Black woman, Northeast American, energetic & warm (once only)
-  await speakUtterance("Welcome to The Spin!", "en-US", 1.2, 0.95, 1.0, 'female');
-
-  // 2. Mandarin – Happy man
-  await speakUtterance("欢迎来到 The Spin！", "zh-CN", 1.2, 1.0, 1.0, 'male');
-
-  // 3. French – Happy woman
-  await speakUtterance("Bienvenue sur The Spin !", "fr-FR", 1.2, 1.0, 1.0, 'female');
-
-  // 4. Swahili – Laughing Kenyan woman
-  await speakUtterance("Karibu The Spin! Ha ha ha!", "sw-KE", 1.3, 1.05, 1.0, 'female');
-
-  // 5. Spanish – Romantic laughing Madrid man
-  await speakUtterance("¡Bienvenidos a The Spin! Jaja, qué alegría!", "es-ES", 1.15, 0.95, 1.0, 'male');
-
-  // Closing – Pleasant female English voice
-  await speakUtterance("Twenty-four hour streaming.", "en-GB", 1.1, 0.85, 0.95, 'female');
-
-  // All voices together saying "Enjoy!"
-  await speakUtterance("Enjoy! Enjoy! Enjoy! Enjoy! Enjoy!", "en-US", 1.3, 1.1, 1.0, 'female');
-
-  onDone && onDone();
-}
-
-function playStationID(onDone) {
-  if (!window.speechSynthesis) { onDone && onDone(); return; }
-  window.speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance("The Spinn... digital radio.");
-  const voices = window.speechSynthesis.getVoices();
-  const v = voices.find(v =>
-    /samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|kate|zira/i.test(v.name)
-  ) || voices.find(v => v.lang.startsWith("en") && v.localService);
-  if (v) msg.voice = v;
-  msg.pitch = 0.85;
-  msg.rate = 0.75;
-  msg.volume = 0.85;
-  msg.onend = () => onDone && onDone();
-  msg.onerror = () => onDone && onDone();
-  window.speechSynthesis.speak(msg);
-}
 
 export default function Channel() {
   const { id } = useParams();
@@ -139,19 +70,12 @@ export default function Channel() {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
   const songsSinceIDRef = useRef(0);
-  const hasPlayedIntroRef = useRef(false);
 
   const audioRef = useRef(null);
 
   const channel = CHANNEL_DATA[id] || CHANNEL_DATA.jazz;
 
-  // Preload voices
-  useEffect(() => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
-  }, []);
+
 
   // Load custom tracks
   useEffect(() => {
@@ -174,15 +98,7 @@ export default function Channel() {
     }
 
     const handleEnded = () => {
-      songsSinceIDRef.current += 1;
-      if (songsSinceIDRef.current >= 14) {
-        songsSinceIDRef.current = 0;
-        playStationID(() => {
-          setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
-        });
-      } else {
-        setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
-      }
+      setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
@@ -202,15 +118,6 @@ export default function Channel() {
   const handleTogglePlay = () => {
     const audio = audioRef.current;
     if (!isPlaying) {
-      // Play full multilingual intro on first play
-      if (!hasPlayedIntroRef.current) {
-        hasPlayedIntroRef.current = true;
-        playWelcomeIntro(() => {
-          setIsPlaying(true);
-          if (audio && customTracks.length > 0) audio.play();
-        });
-        return;
-      }
       setIsPlaying(true);
       if (audio && customTracks.length > 0) audio.play();
     } else {
