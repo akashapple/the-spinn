@@ -5,6 +5,7 @@ import AdBanner from "../components/AdBanner";
 
 const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
 const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
+const WORLDBEAT_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/08c45172e_generated_image.png";
 const HERO_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/502647789_generated_1f43b1cd.png";
 
 export default function Home() {
@@ -73,8 +74,8 @@ export default function Home() {
           <h2 className="font-display text-2xl font-semibold text-foreground">Choose Your Vibe</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
             <ChannelCard
               name="Jazz"
               genre="Smooth Jazz • Bebop • Cool Jazz • Fusion"
@@ -92,7 +93,15 @@ export default function Home() {
               accentColor="bg-accent"
               listeners="3.1K"
               isActive={false} />
-            
+
+            <ChannelCard
+              name="World Beat"
+              genre="Afrobeat • Latin • Caribbean • World"
+              image={WORLDBEAT_IMG}
+              path="/channel/worldbeat"
+              accentColor="bg-chart-3"
+              listeners="1.8K"
+              isActive={false} />
           </div>
 
           {/* Sidebar Ad */}

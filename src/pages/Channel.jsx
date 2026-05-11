@@ -132,7 +132,7 @@ export default function Channel() {
 
   return (
     <div className="min-h-screen pb-24">
-      <audio ref={audioRef} />
+      <audio ref={audioRef} volume={1} />
 
       {showAddModal && (
         <AddTrackModal

@@ -14,6 +14,14 @@ export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTo
   const [volume, setVolume] = useState([85]);
   const [isMuted, setIsMuted] = useState(false);
 
+  // Set initial volume on mount and when audioRef changes
+  useEffect(() => {
+    const audio = audioRef?.current;
+    if (!audio) return;
+    audio.volume = 0.85;
+    audio.muted = false;
+  }, [audioRef]);
+
   const isJazz = channel === "jazz";
   const accentClass = isJazz ? "bg-primary" : channel === "worldbeat" ? "bg-chart-3" : "bg-accent";
   const textAccent = isJazz ? "text-primary" : channel === "worldbeat" ? "text-chart-3" : "text-accent";
