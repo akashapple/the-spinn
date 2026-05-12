@@ -73,6 +73,14 @@ export default function Channel() {
 
   const audioRef = useRef(null);
 
+  // Set volume once on mount
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 1;
+      audioRef.current.muted = false;
+    }
+  }, []);
+
   const channel = CHANNEL_DATA[id] || CHANNEL_DATA.jazz;
 
 
@@ -132,7 +140,7 @@ export default function Channel() {
 
   return (
     <div className="min-h-screen pb-24">
-      <audio ref={audioRef} volume={1} />
+      <audio ref={audioRef} />
 
       {showAddModal && (
         <AddTrackModal
