@@ -11,14 +11,14 @@ const CHANNEL_LABELS = {
 };
 
 export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTogglePlay, audioRef }) {
-  const [volume, setVolume] = useState([85]);
+  const [volume, setVolume] = useState([100]);
   const [isMuted, setIsMuted] = useState(false);
 
-  // Set initial volume on mount and when audioRef changes
+  // Enforce unmuted + full volume on mount
   useEffect(() => {
     const audio = audioRef?.current;
     if (!audio) return;
-    audio.volume = 0.85;
+    audio.volume = 1;
     audio.muted = false;
   }, [audioRef]);
 
@@ -30,6 +30,7 @@ export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTo
   useEffect(() => {
     const audio = audioRef?.current;
     if (!audio) return;
+    audio.muted = isMuted;
     audio.volume = isMuted ? 0 : volume[0] / 100;
   }, [volume, isMuted, audioRef]);
 
@@ -87,7 +88,7 @@ export default function PlayerBar({ channel, trackTitle, artist, isPlaying, onTo
           </div>
 
           {/* Volume */}
-          <div className="hidden sm:flex items-center gap-3 flex-1 justify-end">
+          <div className="flex items-center gap-3 flex-1 justify-end">
             <button onClick={toggleMute} className="text-muted-foreground hover:text-foreground transition-colors">
               {isMuted || volume[0] === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>

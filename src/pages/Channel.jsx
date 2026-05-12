@@ -85,44 +85,65 @@ export default function Channel() {
 
 
 
-  // Audio: handle play/pause and auto-advance
+  // Initialise audio element: force unmuted, full volume, wire error logging
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (customTracks.length === 0) return;
+    audio.volume = 1;
+    audio.muted = false;
+
+    const handleError = (e) => {
+      console.error("[SoulWave] Audio error:", e, "src:", audio.src, "networkState:", audio.networkState, "error code:", audio.error?.code, audio.error?.message);
+    };
+    audio.addEventListener("error", handleError);
+    return () => audio.removeEventListener("error", handleError);
+  }, []);
+
+  // Load track src and auto-advance on end
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || customTracks.length === 0) return;
 
     const src = customTracks[currentTrackIndex]?.file_url;
-    if (src && audio.src !== src) {
-      audio.src = src;
-      if (isPlaying) audio.play();
+    if (!src) return;
+
+    console.log("[SoulWave] Loading track:", src);
+    audio.src = src;
+    audio.volume = 1;
+    audio.muted = false;
+    audio.load();
+
+    if (isPlaying) {
+      audio.play().catch(err => console.error("[SoulWave] play() failed:", err));
     }
 
     const handleEnded = () => {
-      setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
+      setCurrentTrackIndex(prev => (prev + 1) % customTracks.length);
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
   }, [customTracks, currentTrackIndex]);
 
-  // Play next track when index changes
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || customTracks.length === 0) return;
-    const src = customTracks[currentTrackIndex]?.file_url;
-    if (src) {
-      audio.src = src;
-      if (isPlaying) audio.play();
-    }
-  }, [currentTrackIndex]);
-
   const handleTogglePlay = () => {
     const audio = audioRef.current;
+    if (!audio) return;
+
     if (!isPlaying) {
-      setIsPlaying(true);
-      if (audio && customTracks.length > 0) audio.play();
+      audio.muted = false;
+      audio.volume = 1;
+      if (customTracks.length > 0 && !audio.src) {
+        audio.src = customTracks[currentTrackIndex]?.file_url || "";
+        audio.load();
+      }
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch(err => {
+          console.error("[SoulWave] play() failed:", err);
+          setIsPlaying(false);
+        });
     } else {
+      audio.pause();
       setIsPlaying(false);
-      if (audio) audio.pause();
     }
   };
 
@@ -132,7 +153,7 @@ export default function Channel() {
 
   return (
     <div className="min-h-screen pb-24">
-      <audio ref={audioRef} volume={1} />
+      <audio ref={audioRef} />
 
       {showAddModal && (
         <AddTrackModal
