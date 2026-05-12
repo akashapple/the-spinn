@@ -69,21 +69,9 @@ export default function Channel() {
   const [customTracks, setCustomTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
-  const songsSinceIDRef = useRef(0);
-
   const audioRef = useRef(null);
 
-  // Set volume once on mount
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 1;
-      audioRef.current.muted = false;
-    }
-  }, []);
-
   const channel = CHANNEL_DATA[id] || CHANNEL_DATA.jazz;
-
-
 
   // Load custom tracks
   useEffect(() => {
@@ -91,46 +79,45 @@ export default function Channel() {
       .then(setCustomTracks);
   }, [id]);
 
-
-
-  // Audio: handle play/pause and auto-advance
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (customTracks.length === 0) return;
-
-    const src = customTracks[currentTrackIndex]?.file_url;
-    if (src && audio.src !== src) {
-      audio.src = src;
-      if (isPlaying) audio.play();
-    }
-
-    const handleEnded = () => {
-      setCurrentTrackIndex((currentTrackIndex + 1) % customTracks.length);
-    };
-    audio.addEventListener("ended", handleEnded);
-    return () => audio.removeEventListener("ended", handleEnded);
-  }, [customTracks, currentTrackIndex]);
-
-  // Play next track when index changes
+  // Load track src when track index or tracks change
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || customTracks.length === 0) return;
     const src = customTracks[currentTrackIndex]?.file_url;
-    if (src) {
-      audio.src = src;
-      if (isPlaying) audio.play();
+    if (!src) return;
+    audio.src = src;
+    audio.volume = 1;
+    audio.muted = false;
+    if (isPlaying) {
+      audio.play().catch(() => {});
     }
-  }, [currentTrackIndex]);
+  }, [customTracks, currentTrackIndex]);
+
+  // Auto-advance to next track on end
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const handleEnded = () => {
+      setCurrentTrackIndex(i => (i + 1) % customTracks.length);
+    };
+    audio.addEventListener("ended", handleEnded);
+    return () => audio.removeEventListener("ended", handleEnded);
+  }, [customTracks]);
 
   const handleTogglePlay = () => {
     const audio = audioRef.current;
+    if (!audio) return;
     if (!isPlaying) {
+      if (customTracks.length > 0 && !audio.src) {
+        audio.src = customTracks[currentTrackIndex]?.file_url;
+        audio.volume = 1;
+        audio.muted = false;
+      }
+      audio.play().catch(() => {});
       setIsPlaying(true);
-      if (audio && customTracks.length > 0) audio.play();
     } else {
+      audio.pause();
       setIsPlaying(false);
-      if (audio) audio.pause();
     }
   };
 
