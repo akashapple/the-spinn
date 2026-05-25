@@ -75,7 +75,7 @@ export default function Channel() {
 
   // Load custom tracks
   useEffect(() => {
-    base44.asServiceRole.entities.Track.filter({ channel: id }, "created_date", 100)
+    base44.entities.Track.filter({ channel: id }, "created_date", 100)
       .then(setCustomTracks);
   }, [id]);
 
