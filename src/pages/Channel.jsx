@@ -91,7 +91,7 @@ export default function Channel() {
     if (isPlaying) {
       audio.play().catch(() => {});
     }
-  }, [customTracks, currentTrackIndex]);
+  }, [customTracks, currentTrackIndex, isPlaying]);
 
   // Auto-advance to next track on end
   useEffect(() => {

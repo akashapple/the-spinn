@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function ChannelChat({ channelId, accentClass = "bg-primary", textAccent = "text-primary" }) {
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
