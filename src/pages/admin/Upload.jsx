@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Upload, Music, CheckCircle, ArrowLeft } from "lucide-react";
+import { Upload, Music, CheckCircle, ArrowLeft, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -18,6 +18,14 @@ export default function AdminUpload() {
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [tracks, setTracks] = useState([]);
+
+  const loadTracks = () =>
+    base44.entities.Track.list("-created_date", 200).then(setTracks);
+
+  useEffect(() => {
+    if (user?.role === "admin") loadTracks();
+  }, [user]);
 
   useEffect(() => {
     if (!isLoadingAuth && (!user || user.role !== "admin")) {
@@ -50,7 +58,19 @@ export default function AdminUpload() {
     setForm({ title: "", artist: "", channel: "jazz" });
     setFile(null);
     setTimeout(() => setSuccess(false), 4000);
+    loadTracks();
   };
+
+  const handleDelete = async (id) => {
+    await base44.entities.Track.delete(id);
+    setTracks(prev => prev.filter(t => t.id !== id));
+  };
+
+  const CHANNELS = [
+    { value: "jazz", label: "Jazz" },
+    { value: "rnb", label: "Neo Soul & R&B" },
+    { value: "worldbeat", label: "World Beat" },
+  ];
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
@@ -143,6 +163,41 @@ export default function AdminUpload() {
             </button>
           </form>
         </div>
+
+        {/* Manage Tracks */}
+        <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 mt-8">
+          <h2 className="font-display text-xl font-bold text-foreground mb-6">Manage Tracks</h2>
+          {CHANNELS.map(ch => {
+            const chTracks = tracks.filter(t => t.channel === ch.value);
+            return (
+              <div key={ch.value} className="mb-6 last:mb-0">
+                <h3 className="text-xs font-body text-muted-foreground uppercase tracking-widest mb-3">{ch.label} · {chTracks.length} track{chTracks.length !== 1 ? "s" : ""}</h3>
+                {chTracks.length === 0 ? (
+                  <p className="text-xs text-muted-foreground/50 font-body py-2">No tracks.</p>
+                ) : (
+                  <div className="divide-y divide-border/30 rounded-xl border border-border/40 overflow-hidden">
+                    {chTracks.map(track => (
+                      <div key={track.id} className="flex items-center justify-between px-4 py-3 bg-secondary/20 hover:bg-secondary/40 transition">
+                        <div className="min-w-0">
+                          <p className="text-sm font-body font-medium text-foreground truncate">{track.title}</p>
+                          <p className="text-xs font-body text-muted-foreground truncate">{track.artist}</p>
+                        </div>
+                        <button
+                          onClick={() => handleDelete(track.id)}
+                          className="ml-4 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition flex-shrink-0"
+                          title="Delete track"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </div>
   );
