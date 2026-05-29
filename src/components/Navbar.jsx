@@ -1,8 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Radio, Headphones } from "lucide-react";
+import { Radio, Headphones, Upload } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Navbar() {
   const location = useLocation();
+  const { user } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
@@ -48,10 +50,24 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Headphones className="w-5 h-5 text-muted-foreground" />
-            <span className="text-xs font-body text-muted-foreground hidden sm:inline">LIVE</span>
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <div className="flex items-center gap-3">
+            {user?.role === "admin" && (
+              <Link
+                to="/admin/upload"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all ${
+                  location.pathname === "/admin/upload"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5" /> Upload
+              </Link>
+            )}
+            <div className="flex items-center gap-2">
+              <Headphones className="w-5 h-5 text-muted-foreground" />
+              <span className="text-xs font-body text-muted-foreground hidden sm:inline">LIVE</span>
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            </div>
           </div>
         </div>
       </div>

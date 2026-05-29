@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Channel from './pages/Channel';
+import AdminUpload from './pages/admin/Upload';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -38,6 +39,7 @@ const AuthenticatedApp = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/channel/:id" element={<Channel />} />
+        <Route path="/admin/upload" element={<AdminUpload />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
