@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Upload, Music, CheckCircle, ArrowLeft, LogIn } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Upload, Music, CheckCircle, ArrowLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -12,50 +12,23 @@ const GENRE_OPTIONS = [
 
 export default function AdminUpload() {
   const { user, isLoadingAuth } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ title: "", artist: "", channel: "jazz" });
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  if (isLoadingAuth) {
+  useEffect(() => {
+    if (!isLoadingAuth && (!user || user.role !== "admin")) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoadingAuth, user, navigate]);
+
+  if (isLoadingAuth || !user || user.role !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <LogIn className="w-7 h-7 text-primary" />
-          </div>
-          <h2 className="font-display text-2xl font-bold text-foreground">Admin Access Required</h2>
-          <p className="font-body text-muted-foreground">Please log in to access the upload page.</p>
-          <button
-            onClick={() => base44.auth.redirectToLogin(window.location.pathname)}
-            className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-body font-medium hover:opacity-90 transition"
-          >
-            Log In
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (user.role !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-3">
-          <h2 className="font-display text-2xl font-bold text-foreground">Access Denied</h2>
-          <p className="font-body text-muted-foreground">This page is for admins only.</p>
-          <Link to="/" className="inline-block px-6 py-2.5 rounded-full bg-secondary text-foreground font-body font-medium hover:opacity-80 transition">
-            Go Home
-          </Link>
-        </div>
       </div>
     );
   }
