@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Upload, Music, CheckCircle, ArrowLeft, Trash2 } from "lucide-react";
+import { Upload, Music, CheckCircle, ArrowLeft, Trash2, UserPlus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -75,9 +75,14 @@ export default function AdminUpload() {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
       <div className="max-w-lg mx-auto">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition mb-8">
-          <ArrowLeft className="w-4 h-4" /> Back to Home
-        </Link>
+        <div className="flex items-center justify-between mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition">
+            <ArrowLeft className="w-4 h-4" /> Back to Home
+          </Link>
+          <Link to="/admin/create-account" className="inline-flex items-center gap-2 text-sm font-body text-primary hover:opacity-80 transition">
+            <UserPlus className="w-4 h-4" /> Create Admin Account
+          </Link>
+        </div>
 
         <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8">
           <div className="flex items-center gap-3 mb-8">
