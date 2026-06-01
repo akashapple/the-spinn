@@ -54,6 +54,16 @@ function UploadInterface({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) { setError("Please select an MP3 file."); return; }
+
+    // DEBUG: log the full user object so we can see what role the JWT carries
+    try {
+      const me = await base44.auth.me();
+      console.log('[DEBUG] User from base44.auth.me():', JSON.stringify(me, null, 2));
+    } catch (debugErr) {
+      console.log('[DEBUG] Could not fetch me():', debugErr.message);
+    }
+    console.log('[DEBUG] user prop passed to UploadInterface:', JSON.stringify(user, null, 2));
+
     setError("");
     setUploading(true);
     try {
