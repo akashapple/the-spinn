@@ -193,6 +193,8 @@ export default function TeamUpload() {
   useEffect(() => {
     base44.auth.isAuthenticated().then(async (authed) => {
       if (authed) {
+        // Auto-assign uploader role if needed
+        await base44.functions.invoke('assignUploaderRole', {});
         const me = await base44.auth.me();
         setUser(me);
       }
