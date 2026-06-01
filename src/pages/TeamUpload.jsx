@@ -56,18 +56,23 @@ function UploadInterface({ user }) {
     if (!file) { setError("Please select an MP3 file."); return; }
     setError("");
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    await base44.entities.Track.create({
-      title: form.title,
-      artist: form.artist,
-      channel: form.channel,
-      file_url,
-    });
-    setUploading(false);
-    setSuccess(true);
-    setForm({ title: "", artist: "", channel: "jazz" });
-    setFile(null);
-    setTimeout(() => setSuccess(false), 4000);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.entities.Track.create({
+        title: form.title,
+        artist: form.artist,
+        channel: form.channel,
+        file_url,
+      });
+      setSuccess(true);
+      setForm({ title: "", artist: "", channel: "jazz" });
+      setFile(null);
+      setTimeout(() => setSuccess(false), 4000);
+    } catch (err) {
+      setError(err.message || "Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -202,7 +207,8 @@ export default function TeamUpload() {
               new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
             ]);
           } catch (_) {}
-          const me = await base44.auth.me();
+          // Force a fresh fetch of the user to pick up any role change
+          const me = await base44.auth.me({ force: true });
           setUser(me);
         }
       } finally {
