@@ -210,9 +210,10 @@ export default function TeamUpload() {
       try {
         const authed = await base44.auth.isAuthenticated();
         if (authed) {
+          // me() returns live DB data — use it to detect role mismatch with JWT
           const me = await base44.auth.me();
-          // If still on default "user" role, assign uploader and force a fresh login
-          // so the new role is baked into the JWT token before any uploads are attempted
+
+          // If still "user" in DB, assign uploader first
           if (me.role === 'user') {
             try {
               await Promise.race([
@@ -220,10 +221,26 @@ export default function TeamUpload() {
                 new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
               ]);
             } catch (_) {}
-            // Force re-login so the JWT is reissued with role: "uploader"
             base44.auth.logout(window.location.href);
             return;
           }
+
+          // DB says "uploader" but JWT may be stale — verify by attempting a
+          // lightweight service call and checking what role the token carries.
+          // We detect a stale JWT by invoking assignUploaderRole: if it returns
+          // assigned:false with role:"uploader" the DB is correct; if the token
+          // still says "user" the function would have tried to re-assign.
+          // Simpler approach: always force a fresh token if DB role != "user"
+          // but we haven't confirmed the JWT is current this session.
+          // We store a session flag so we only do this once per browser session.
+          const sessionKey = 'sw_token_refreshed_' + me.id;
+          if (!sessionStorage.getItem(sessionKey)) {
+            sessionStorage.setItem(sessionKey, '1');
+            // Force logout+redirect once per session to guarantee a fresh JWT
+            base44.auth.logout(window.location.href);
+            return;
+          }
+
           setUser(me);
         }
       } finally {
