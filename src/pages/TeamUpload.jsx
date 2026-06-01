@@ -200,15 +200,20 @@ export default function TeamUpload() {
       try {
         const authed = await base44.auth.isAuthenticated();
         if (authed) {
-          // Auto-assign uploader role — ignore errors, 3s timeout
-          try {
-            await Promise.race([
-              base44.functions.invoke('assignUploaderRole', {}),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
-            ]);
-          } catch (_) {}
-          // Force a fresh fetch of the user to pick up any role change
-          const me = await base44.auth.me({ force: true });
+          const me = await base44.auth.me();
+          // If still on default "user" role, assign uploader and force a fresh login
+          // so the new role is baked into the JWT token before any uploads are attempted
+          if (me.role === 'user') {
+            try {
+              await Promise.race([
+                base44.functions.invoke('assignUploaderRole', {}),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
+              ]);
+            } catch (_) {}
+            // Force re-login so the JWT is reissued with role: "uploader"
+            base44.auth.logout(window.location.href);
+            return;
+          }
           setUser(me);
         }
       } finally {
