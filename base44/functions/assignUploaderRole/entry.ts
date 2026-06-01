@@ -11,7 +11,7 @@ Deno.serve(async (req) => {
 
     // Only assign uploader if they are currently a plain "user" (default role)
     if (user.role === 'user') {
-      await base44.auth.updateMe({ role: 'uploader' });
+      await base44.asServiceRole.entities.User.update(user.id, { role: 'uploader' });
       return Response.json({ assigned: true });
     }
 
