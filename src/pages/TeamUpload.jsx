@@ -9,10 +9,6 @@ const GENRE_OPTIONS = [
 ];
 
 function LandingScreen() {
-  const handleSignIn = () => {
-    base44.auth.redirectToLogin(window.location.href);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
       <div className="max-w-md w-full text-center">
@@ -25,10 +21,10 @@ function LandingScreen() {
         <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 mb-6">
           <h2 className="font-display text-xl font-semibold text-foreground mb-2">Welcome, Team Member</h2>
           <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
-            Sign in to your account or create a new one to start uploading tracks to our channels.
+            Sign in to your account to start uploading tracks to our channels.
           </p>
           <button
-            onClick={handleSignIn}
+            onClick={() => base44.auth.redirectToLogin(window.location.href)}
             className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-body font-semibold text-sm hover:opacity-90 transition flex items-center justify-center gap-2"
           >
             <Music className="w-4 h-4" />
@@ -54,21 +50,11 @@ function UploadInterface({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) { setError("Please select an MP3 file."); return; }
-
-    // DEBUG: log the full user object so we can see what role the JWT carries
-    try {
-      const me = await base44.auth.me();
-      console.log('[DEBUG] User from base44.auth.me():', JSON.stringify(me, null, 2));
-    } catch (debugErr) {
-      console.log('[DEBUG] Could not fetch me():', debugErr.message);
-    }
-    console.log('[DEBUG] user prop passed to UploadInterface:', JSON.stringify(user, null, 2));
-
     setError("");
     setUploading(true);
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await base44.entities.Track.create({
+      await base44.functions.invoke('createTrack', {
         title: form.title,
         artist: form.artist,
         channel: form.channel,
@@ -83,10 +69,6 @@ function UploadInterface({ user }) {
     } finally {
       setUploading(false);
     }
-  };
-
-  const handleLogout = () => {
-    base44.auth.logout(window.location.href);
   };
 
   return (
@@ -104,7 +86,7 @@ function UploadInterface({ user }) {
             </div>
           </div>
           <button
-            onClick={handleLogout}
+            onClick={() => base44.auth.logout(window.location.href)}
             className="flex items-center gap-1.5 text-xs font-body text-muted-foreground hover:text-foreground transition"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -206,48 +188,13 @@ export default function TeamUpload() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const authed = await base44.auth.isAuthenticated();
-        if (authed) {
-          // me() returns live DB data — use it to detect role mismatch with JWT
-          const me = await base44.auth.me();
-
-          // If still "user" in DB, assign uploader first
-          if (me.role === 'user') {
-            try {
-              await Promise.race([
-                base44.functions.invoke('assignUploaderRole', {}),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
-              ]);
-            } catch (_) {}
-            base44.auth.logout(window.location.href);
-            return;
-          }
-
-          // DB says "uploader" but JWT may be stale — verify by attempting a
-          // lightweight service call and checking what role the token carries.
-          // We detect a stale JWT by invoking assignUploaderRole: if it returns
-          // assigned:false with role:"uploader" the DB is correct; if the token
-          // still says "user" the function would have tried to re-assign.
-          // Simpler approach: always force a fresh token if DB role != "user"
-          // but we haven't confirmed the JWT is current this session.
-          // We store a session flag so we only do this once per browser session.
-          const sessionKey = 'sw_token_refreshed_' + me.id;
-          if (!sessionStorage.getItem(sessionKey)) {
-            sessionStorage.setItem(sessionKey, '1');
-            // Force logout+redirect once per session to guarantee a fresh JWT
-            base44.auth.logout(window.location.href);
-            return;
-          }
-
-          setUser(me);
-        }
-      } finally {
-        setLoading(false);
+    base44.auth.isAuthenticated().then(async (authed) => {
+      if (authed) {
+        const me = await base44.auth.me();
+        setUser(me);
       }
-    };
-    init();
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
