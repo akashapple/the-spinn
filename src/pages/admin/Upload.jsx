@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Upload, Music, CheckCircle, ArrowLeft, Trash2, UserPlus } from "lucide-react";
+import { Upload, Music, CheckCircle, ArrowLeft, Trash2, UserPlus, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -19,12 +19,19 @@ export default function AdminUpload() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [tracks, setTracks] = useState([]);
+  const [uploaders, setUploaders] = useState([]);
 
   const loadTracks = () =>
     base44.entities.Track.list("-created_date", 200).then(setTracks);
 
+  const loadUploaders = () =>
+    base44.entities.User.filter({ role: "uploader" }).then(setUploaders);
+
   useEffect(() => {
-    if (user?.role === "admin") loadTracks();
+    if (user?.role === "admin") {
+      loadTracks();
+      loadUploaders();
+    }
   }, [user]);
 
   useEffect(() => {
@@ -201,6 +208,39 @@ export default function AdminUpload() {
               </div>
             );
           })}
+        </div>
+
+        {/* Uploader Accounts */}
+        <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 mt-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Users className="w-5 h-5 text-primary" />
+            <h2 className="font-display text-xl font-bold text-foreground">Uploader Accounts</h2>
+            <span className="text-xs font-body text-muted-foreground ml-auto">{uploaders.length} account{uploaders.length !== 1 ? "s" : ""}</span>
+          </div>
+          {uploaders.length === 0 ? (
+            <p className="text-xs text-muted-foreground/50 font-body py-2">No uploader accounts yet. They sign up via /team-upload.</p>
+          ) : (
+            <div className="divide-y divide-border/30 rounded-xl border border-border/40 overflow-hidden">
+              {uploaders.map(u => (
+                <div key={u.id} className="flex items-center justify-between px-4 py-3 bg-secondary/20 hover:bg-secondary/40 transition">
+                  <div className="min-w-0">
+                    <p className="text-sm font-body font-medium text-foreground truncate">{u.full_name || "—"}</p>
+                    <p className="text-xs font-body text-muted-foreground truncate">{u.email}</p>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await base44.entities.User.delete(u.id);
+                      setUploaders(prev => prev.filter(x => x.id !== u.id));
+                    }}
+                    className="ml-4 p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition flex-shrink-0"
+                    title="Remove account"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>

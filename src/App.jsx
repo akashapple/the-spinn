@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Channel from './pages/Channel';
 import AdminUpload from './pages/admin/Upload';
 import AdminCreateAccount from './pages/admin/CreateAccount';
+import TeamUpload from './pages/TeamUpload';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -42,6 +43,7 @@ const AuthenticatedApp = () => {
         <Route path="/channel/:id" element={<Channel />} />
         <Route path="/admin/upload" element={<AdminUpload />} />
         <Route path="/admin/create-account" element={<AdminCreateAccount />} />
+        <Route path="/team-upload" element={<TeamUpload />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
