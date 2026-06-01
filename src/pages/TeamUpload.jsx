@@ -191,15 +191,25 @@ export default function TeamUpload() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.isAuthenticated().then(async (authed) => {
-      if (authed) {
-        // Auto-assign uploader role if needed
-        await base44.functions.invoke('assignUploaderRole', {});
-        const me = await base44.auth.me();
-        setUser(me);
+    const init = async () => {
+      try {
+        const authed = await base44.auth.isAuthenticated();
+        if (authed) {
+          // Auto-assign uploader role — ignore errors, 3s timeout
+          try {
+            await Promise.race([
+              base44.functions.invoke('assignUploaderRole', {}),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
+            ]);
+          } catch (_) {}
+          const me = await base44.auth.me();
+          setUser(me);
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
+    init();
   }, []);
 
   if (loading) {
