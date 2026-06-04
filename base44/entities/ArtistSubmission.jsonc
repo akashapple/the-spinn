@@ -1,0 +1,50 @@
+{
+  "name": "ArtistSubmission",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "jazz",
+        "rnb",
+        "worldbeat"
+      ]
+    },
+    "track_title": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "artist_name",
+    "email",
+    "genre",
+    "track_title",
+    "file_url"
+  ]
+}
