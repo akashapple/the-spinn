@@ -17,6 +17,7 @@ export default function ArtistSubmission() {
   });
   const [file, setFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [progressMsg, setProgressMsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,8 +26,13 @@ export default function ArtistSubmission() {
     if (!file) { setError("Please select an audio file."); return; }
     setError("");
     setSubmitting(true);
+    setProgressMsg("Uploading your track...");
 
+    const almostTimer = setTimeout(() => setProgressMsg("Almost there..."), 8000);
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    clearTimeout(almostTimer);
+
+    setProgressMsg("Saving your submission...");
     await base44.entities.ArtistSubmission.create({
       ...form,
       file_url,
@@ -34,6 +40,7 @@ export default function ArtistSubmission() {
       status: "pending",
     });
 
+    setProgressMsg("Submitted successfully!");
     setSubmitting(false);
     setSuccess(true);
   };
@@ -136,6 +143,7 @@ export default function ArtistSubmission() {
                 {file && <span className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(1)} MB</span>}
                 <input type="file" accept="audio/*" className="hidden" onChange={e => setFile(e.target.files[0])} />
               </label>
+              <p className="text-xs font-body text-muted-foreground/60 mt-2">Large files may take up to 30 seconds to upload. Please wait.</p>
               {error && <p className="text-xs text-destructive mt-1.5">{error}</p>}
             </div>
 
@@ -147,7 +155,7 @@ export default function ArtistSubmission() {
               {submitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  Submitting...
+                  {progressMsg}
                 </>
               ) : (
                 <>
