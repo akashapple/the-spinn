@@ -51,6 +51,12 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              to="/submit"
+              className="px-4 py-1.5 rounded-full text-sm font-body font-semibold border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+            >
+              Submit Track
+            </Link>
             <div className="flex items-center gap-2">
               <Headphones className="w-5 h-5 text-muted-foreground" />
               <span className="text-xs font-body text-muted-foreground hidden sm:inline">LIVE</span>
