@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { CheckCircle, XCircle, Play, Pause, Music, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -71,7 +70,7 @@ export default function AdminReview() {
     setSubmissions(prev => prev.map(s => s.id === id ? { ...s, status } : s));
   };
 
-  if (isLoadingAuth || !user || user.role !== "admin") {
+  if (isLoadingAuth || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-primary rounded-full animate-spin" />
@@ -79,10 +78,22 @@ export default function AdminReview() {
     );
   }
 
+  if (user.role !== "admin") {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="font-display text-xl text-foreground mb-2">Access Denied</p>
+          <p className="font-body text-sm text-muted-foreground mb-6">This page is for admins only.</p>
+          <Link to="/" className="text-primary text-sm font-body hover:opacity-80 transition">Go Home</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen pt-10 pb-20 px-4 bg-background">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-8">
           <Link to="/admin/upload" className="inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition">
             <ArrowLeft className="w-4 h-4" /> Admin Upload
@@ -113,7 +124,6 @@ export default function AdminReview() {
             {submissions.map(s => (
               <div key={s.id} className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  {/* Info */}
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-display text-lg font-semibold text-foreground">{s.artist_name}</h3>
@@ -129,7 +139,6 @@ export default function AdminReview() {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
                     {s.file_url && <AudioPreview fileUrl={s.file_url} />}
                     <button
