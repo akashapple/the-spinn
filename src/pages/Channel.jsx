@@ -13,6 +13,7 @@ import ChannelChat from "../components/ChannelChat";
 import AlbumFeature from "../components/AlbumFeature";
 import ConcertLinks from "../components/ConcertLinks";
 import AddTrackModal from "../components/AddTrackModal";
+import FeaturedArtistHour from "../components/FeaturedArtistHour";
 
 const JAZZ_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/99deadc72_generated_a6fc5c33.png";
 const RNB_IMG = "https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/b3abba13b_generated_fcb1e711.png";
@@ -223,6 +224,8 @@ export default function Channel() {
                 </span>
               </div>
             </motion.div>
+
+            <FeaturedArtistHour channelId={id} textAccent={channel.textAccent} />
 
             <TrackList channel={id} customTracks={customTracks} currentIndex={currentTrackIndex} onSelect={setCurrentTrackIndex} />
 
