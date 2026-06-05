@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { CheckCircle, XCircle, Play, Pause, Mic, ArrowLeft, Music2, MessageSquare, Send, X } from "lucide-react";
+import { CheckCircle, XCircle, Play, Pause, Mic, ArrowLeft, Music2, MessageSquare, Send, X, User } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -233,6 +233,13 @@ function SubmissionCard({ s, onUpdateStatus, index }) {
               <MessageSquare className="w-4 h-4" />
               <span className="hidden sm:inline">Message</span>
             </button>
+            <a
+              href={`/artist/profile?email=${encodeURIComponent(s.email)}`}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border/40 bg-secondary/60 text-muted-foreground hover:text-foreground hover:border-primary/30 text-xs font-body font-bold transition"
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Profile</span>
+            </a>
           </div>
         </div>
       </div>
