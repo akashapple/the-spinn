@@ -56,9 +56,22 @@ export default function ArtistSubmission() {
           <p className="font-body text-muted-foreground leading-relaxed">
             Thank you! Your track has been submitted for review.
           </p>
+          {/* Profile prompt */}
+          <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/5 px-6 py-5">
+            <p className="font-body text-sm text-foreground/80 leading-relaxed mb-3">
+              Want to track your submission? Login or create an account to view your artist profile.
+            </p>
+            <a
+              href="/artist/profile"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-body font-semibold text-sm hover:opacity-90 transition"
+            >
+              View My Artist Profile →
+            </a>
+          </div>
+
           <button
             onClick={() => { setSuccess(false); setForm({ artist_name: "", email: "", genre: "", track_title: "" }); setFile(null); }}
-            className="mt-8 px-6 py-2.5 rounded-xl border border-border/50 text-sm font-body text-muted-foreground hover:text-foreground hover:border-primary/40 transition"
+            className="mt-4 px-6 py-2.5 rounded-xl border border-border/50 text-sm font-body text-muted-foreground hover:text-foreground hover:border-primary/40 transition"
           >
             Submit another track
           </button>

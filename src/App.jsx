@@ -13,6 +13,7 @@ import AdminCreateAccount from './pages/admin/CreateAccount';
 import TeamUpload from './pages/TeamUpload';
 import ArtistSubmission from './pages/ArtistSubmission';
 import AdminReview from './pages/admin/AdminReview';
+import ArtistProfile from './pages/artist/Profile';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
         <Route path="/team-upload" element={<TeamUpload />} />
         <Route path="/submit" element={<ArtistSubmission />} />
         <Route path="/admin/reviews" element={<AdminReview />} />
+        <Route path="/artist/profile" element={<ArtistProfile />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

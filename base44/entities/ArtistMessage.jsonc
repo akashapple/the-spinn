@@ -1,0 +1,36 @@
+{
+  "name": "ArtistMessage",
+  "type": "object",
+  "properties": {
+    "submission_id": {
+      "type": "string",
+      "description": "ID of the linked ArtistSubmission"
+    },
+    "artist_email": {
+      "type": "string",
+      "description": "Email of the artist this message is for"
+    },
+    "artist_name": {
+      "type": "string",
+      "description": "Name of the artist"
+    },
+    "message": {
+      "type": "string",
+      "description": "Message content from admin"
+    },
+    "track_title": {
+      "type": "string",
+      "description": "Track title this message relates to"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the artist has read this message"
+    }
+  },
+  "required": [
+    "submission_id",
+    "artist_email",
+    "message"
+  ]
+}

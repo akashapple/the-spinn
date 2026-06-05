@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { CheckCircle, XCircle, Play, Pause, Mic, ArrowLeft, Music2 } from "lucide-react";
+import { CheckCircle, XCircle, Play, Pause, Mic, ArrowLeft, Music2, MessageSquare, Send, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const GENRE_LABELS = { jazz: "Jazz", rnb: "Neo Soul & R&B", worldbeat: "World Beat" };
 const TABS = ["all", "pending", "approved", "rejected"];
@@ -29,11 +29,7 @@ function WaveformPlaceholder() {
       {Array.from({ length: 18 }).map((_, i) => {
         const h = Math.sin(i * 0.7) * 40 + 50;
         return (
-          <div
-            key={i}
-            className="w-[3px] rounded-full bg-primary/30"
-            style={{ height: `${h}%` }}
-          />
+          <div key={i} className="w-[3px] rounded-full bg-primary/30" style={{ height: `${h}%` }} />
         );
       })}
     </div>
@@ -79,15 +75,10 @@ function AudioPlayer({ fileUrl }) {
   return (
     <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-black/30 border border-primary/10">
       <audio ref={audioRef} src={fileUrl} preload="metadata" className="hidden" />
-      <button
-        onClick={toggle}
-        className="flex-shrink-0 w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition shadow-lg shadow-primary/20"
-      >
+      <button onClick={toggle} className="flex-shrink-0 w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition shadow-lg shadow-primary/20">
         {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
       </button>
-
-      {/* Waveform bars */}
-      <div className="flex-1 flex items-center gap-[2px] h-8 relative">
+      <div className="flex-1 flex items-center gap-[2px] h-8">
         {Array.from({ length: 40 }).map((_, i) => {
           const h = Math.sin(i * 0.5) * 40 + 55;
           const filled = i / 40 <= progress;
@@ -102,17 +93,70 @@ function AudioPlayer({ fileUrl }) {
           );
         })}
       </div>
-
-      {duration > 0 && (
-        <span className="text-xs font-body text-muted-foreground flex-shrink-0">{fmt(duration)}</span>
-      )}
+      {duration > 0 && <span className="text-xs font-body text-muted-foreground flex-shrink-0">{fmt(duration)}</span>}
     </div>
+  );
+}
+
+function MessageComposer({ submission, onClose, onSent }) {
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleSend = async () => {
+    if (!text.trim()) return;
+    setSending(true);
+    await base44.entities.ArtistMessage.create({
+      submission_id: submission.id,
+      artist_email: submission.email,
+      artist_name: submission.artist_name,
+      track_title: submission.track_title,
+      message: text.trim(),
+      read: false,
+    });
+    setSending(false);
+    setSent(true);
+    setTimeout(() => { onSent(); onClose(); }, 1200);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="overflow-hidden"
+    >
+      <div className="mt-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-body text-primary font-semibold uppercase tracking-widest">Message to {submission.artist_name}</p>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <textarea
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="Write your message to the artist..."
+          rows={3}
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm font-body text-foreground placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-primary/40 resize-none mb-3"
+        />
+        <button
+          onClick={handleSend}
+          disabled={sending || sent || !text.trim()}
+          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-body font-bold hover:opacity-90 transition disabled:opacity-50"
+        >
+          {sending ? <div className="w-3.5 h-3.5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+          {sent ? "Sent!" : sending ? "Sending..." : "Send Message"}
+        </button>
+      </div>
+    </motion.div>
   );
 }
 
 function SubmissionCard({ s, onUpdateStatus, index }) {
   const status = s.status || "pending";
   const statusStyle = STATUS_STYLES[status] || STATUS_STYLES.pending;
+  const [showComposer, setShowComposer] = useState(false);
 
   return (
     <motion.div
@@ -125,9 +169,7 @@ function SubmissionCard({ s, onUpdateStatus, index }) {
       <div className="flex flex-col sm:flex-row gap-0">
         {/* Left: album art placeholder */}
         <div className="sm:w-32 h-32 sm:h-auto flex-shrink-0 bg-secondary/60 flex items-center justify-center relative overflow-hidden">
-          <div className="absolute inset-0">
-            <WaveformPlaceholder />
-          </div>
+          <div className="absolute inset-0"><WaveformPlaceholder /></div>
           <div className="relative z-10 w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
             <Music2 className="w-6 h-6 text-primary" />
           </div>
@@ -157,6 +199,17 @@ function SubmissionCard({ s, onUpdateStatus, index }) {
           {/* Audio player */}
           {s.file_url && <AudioPlayer fileUrl={s.file_url} />}
 
+          {/* Message composer */}
+          <AnimatePresence>
+            {showComposer && (
+              <MessageComposer
+                submission={s}
+                onClose={() => setShowComposer(false)}
+                onSent={() => setShowComposer(false)}
+              />
+            )}
+          </AnimatePresence>
+
           {/* Action buttons */}
           <div className="flex gap-2 mt-auto pt-1">
             <button
@@ -172,6 +225,13 @@ function SubmissionCard({ s, onUpdateStatus, index }) {
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-900/60 border border-red-700/40 text-red-300 text-xs font-body font-bold hover:bg-red-900/80 transition disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <XCircle className="w-4 h-4" /> Reject
+            </button>
+            <button
+              onClick={() => setShowComposer(p => !p)}
+              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-body font-bold transition ${showComposer ? "bg-primary/20 border-primary/40 text-primary" : "bg-secondary/60 border-border/40 text-muted-foreground hover:text-foreground hover:border-primary/30"}`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">Message</span>
             </button>
           </div>
         </div>
@@ -237,13 +297,10 @@ export default function AdminReview() {
   return (
     <div className="min-h-screen pt-10 pb-24 px-4 bg-background">
       <div className="max-w-4xl mx-auto">
-
-        {/* Back link */}
         <Link to="/admin/upload" className="inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition mb-8">
           <ArrowLeft className="w-4 h-4" /> Admin Upload
         </Link>
 
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
@@ -254,8 +311,6 @@ export default function AdminReview() {
               <p className="text-sm font-body text-muted-foreground mt-0.5">Review and manage submitted tracks</p>
             </div>
           </div>
-
-          {/* Stats bar */}
           <div className="flex gap-3">
             <StatCard label="Total" value={countFor("all")} color="text-primary" />
             <StatCard label="Pending" value={countFor("pending")} color="text-yellow-400" />
@@ -264,7 +319,6 @@ export default function AdminReview() {
           </div>
         </div>
 
-        {/* Filter tabs */}
         <div className="flex gap-2 mb-7 flex-wrap">
           {TABS.map(tab => (
             <button
@@ -284,7 +338,6 @@ export default function AdminReview() {
           ))}
         </div>
 
-        {/* Content */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <div className="w-10 h-10 border-4 border-border border-t-primary rounded-full animate-spin" />
