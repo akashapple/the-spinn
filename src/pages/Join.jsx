@@ -82,7 +82,7 @@ export default function Join() {
               to="/artist/profile"
               className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl border border-border/60 text-muted-foreground font-body text-sm hover:text-foreground hover:border-primary/40 transition"
             >
-              Already a member? View your profile
+              New or returning artist? Start here
             </Link>
           </div>
         </motion.div>
