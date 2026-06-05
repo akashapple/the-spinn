@@ -1,0 +1,56 @@
+{
+  "name": "ArtistProfile",
+  "type": "object",
+  "properties": {
+    "artist_name": {
+      "type": "string",
+      "description": "Artist's display name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Artist's contact email"
+    },
+    "photo": {
+      "type": "string",
+      "format": "uri",
+      "description": "Artist profile photo URL"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Artist biography"
+    },
+    "genre": {
+      "type": "string",
+      "enum": [
+        "jazz",
+        "rnb",
+        "worldbeat"
+      ],
+      "description": "Primary genre"
+    },
+    "social_instagram": {
+      "type": "string",
+      "description": "Instagram handle or URL"
+    },
+    "social_twitter": {
+      "type": "string",
+      "description": "Twitter/X handle or URL"
+    },
+    "social_facebook": {
+      "type": "string",
+      "description": "Facebook page URL"
+    },
+    "social_spotify": {
+      "type": "string",
+      "description": "Spotify artist URL"
+    },
+    "submission_id": {
+      "type": "string",
+      "description": "Linked ArtistSubmission ID"
+    }
+  },
+  "required": [
+    "artist_name",
+    "email"
+  ]
+}
