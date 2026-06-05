@@ -52,6 +52,12 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <Link
+              to="/join"
+              className="text-sm font-body font-semibold text-primary hover:opacity-75 transition-opacity hidden sm:inline"
+            >
+              Join The Spinn
+            </Link>
+            <Link
               to="/submit"
               className="px-4 py-1.5 rounded-full text-sm font-body font-semibold border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
             >
