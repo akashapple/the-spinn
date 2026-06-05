@@ -68,7 +68,7 @@ export default function Join() {
           </h1>
 
           <p className="font-body text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-10">
-            Submit your track to The Spinn and get featured on our Jazz, Neo Soul &amp; R&amp;B, or World Beat channels — broadcasting live around the clock.
+            Share your music with thousands of listeners. Join The Spinn community and let your sound be heard on our 24/7 live radio channels.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
