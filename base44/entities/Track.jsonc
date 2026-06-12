@@ -30,14 +30,7 @@
     "file_url"
   ],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role__in": [
-          "admin",
-          "uploader"
-        ]
-      }
-    },
+    "create": {},
     "read": {},
     "update": {
       "user_condition": {
