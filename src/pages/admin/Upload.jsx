@@ -53,19 +53,26 @@ export default function AdminUpload() {
     if (!file) { setError("Please select an MP3 file."); return; }
     setError("");
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    await base44.entities.Track.create({
-      title: form.title,
-      artist: form.artist,
-      channel: form.channel,
-      file_url,
-    });
-    setUploading(false);
-    setSuccess(true);
-    setForm({ title: "", artist: "", channel: "jazz" });
-    setFile(null);
-    setTimeout(() => setSuccess(false), 4000);
-    loadTracks();
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.entities.Track.create({
+        title: form.title,
+        artist: form.artist,
+        channel: form.channel,
+        file_url,
+      });
+      setUploading(false);
+      setSuccess(true);
+      setForm({ title: "", artist: "", channel: "jazz" });
+      setFile(null);
+      setTimeout(() => setSuccess(false), 4000);
+      loadTracks();
+    } catch (err) {
+      setUploading(false);
+      const msg = err?.response?.data?.detail || err?.response?.data?.message || err?.message || "Upload failed";
+      setError(`Error: ${msg} (status: ${err?.response?.status ?? "unknown"})`);
+      console.error("Upload error:", err?.response?.data ?? err);
+    }
   };
 
   const handleDelete = async (id) => {
