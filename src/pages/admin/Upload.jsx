@@ -55,7 +55,7 @@ export default function AdminUpload() {
     setUploading(true);
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await base44.entities.Track.create({
+      await base44.functions.invoke("createTrack", {
         title: form.title,
         artist: form.artist,
         channel: form.channel,
