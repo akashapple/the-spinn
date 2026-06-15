@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Radio, Disc3, Headphones } from "lucide-react";
+import { Radio, Disc3, Headphones, Youtube } from "lucide-react";
 import ChannelCard from "../components/ChannelCard";
 import AdBanner from "../components/AdBanner";
 
@@ -137,9 +137,19 @@ export default function Home() {
             <Radio className="w-4 h-4 text-primary" />
             <span className="font-display text-sm text-foreground">The SPINN</span>
           </div>
-          <p className="text-xs font-body text-muted-foreground">© 2026 TheSPINN Radio. All rights reserved.
-
-          </p>
+          <div className="flex items-center gap-4">
+            <a href="https://www.youtube.com/@TheSpinnOnMusic" target="_blank" rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-red-500 transition-colors">
+              <Youtube className="w-5 h-5" />
+            </a>
+            <a href="https://www.tiktok.com/@zhostofzspinn" target="_blank" rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+              </svg>
+            </a>
+          </div>
+          <p className="text-xs font-body text-muted-foreground">© 2026 TheSPINN Radio. All rights reserved.</p>
         </div>
       </footer>
     </div>);
