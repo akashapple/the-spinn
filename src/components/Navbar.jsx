@@ -9,7 +9,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-28">
+        <div className="flex items-center justify-between h-24 sm:h-32">
           <Link to="/" className="flex items-center group">
             <img
               src="https://media.base44.com/images/public/69c4550d94d5716560c9bc7d/8894de84d_logo_mark_transparent.png"
@@ -21,7 +21,7 @@ export default function Navbar() {
           <div className="flex items-center gap-1">
             <Link
               to="/channel/jazz"
-              className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
+              className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-body font-medium transition-all ${
               location.pathname === "/channel/jazz" ?
               "bg-primary text-primary-foreground" :
               "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
@@ -31,7 +31,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/channel/rnb"
-              className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
+              className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-body font-medium transition-all ${
               location.pathname === "/channel/rnb" ?
               "bg-accent text-accent-foreground" :
               "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
@@ -40,7 +40,7 @@ export default function Navbar() {
             </Link>
             <Link
               to="/channel/worldbeat"
-              className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
+              className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-body font-medium transition-all ${
               location.pathname === "/channel/worldbeat" ?
               "bg-chart-3 text-white" :
               "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
@@ -49,22 +49,22 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               to="/join"
-              className="text-sm font-body font-semibold text-primary hover:opacity-75 transition-opacity hidden sm:inline"
+              className="text-sm sm:text-base font-body font-semibold text-primary hover:opacity-75 transition-opacity hidden sm:inline"
             >
               Join The Spinn
             </Link>
             <Link
               to="/submit"
-              className="px-4 py-1.5 rounded-full text-sm font-body font-semibold border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+              className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-body font-semibold border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
             >
               Submit Track
             </Link>
             <div className="flex items-center gap-2">
               <Headphones className="w-5 h-5 text-muted-foreground" />
-              <span className="text-xs font-body text-muted-foreground hidden sm:inline">LIVE</span>
+              <span className="text-xs sm:text-sm font-body text-muted-foreground hidden sm:inline">LIVE</span>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             </div>
           </div>
