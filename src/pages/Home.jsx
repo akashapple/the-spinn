@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Radio, Disc3, Headphones, Youtube } from "lucide-react";
+import { Radio, Disc3, Headphones, Youtube, Facebook } from "lucide-react";
 import ChannelCard from "../components/ChannelCard";
 import AdBanner from "../components/AdBanner";
 
@@ -141,6 +141,10 @@ export default function Home() {
             <a href="https://www.youtube.com/@TheSpinnOnMusic" target="_blank" rel="noopener noreferrer"
               className="text-muted-foreground hover:text-red-500 transition-colors">
               <Youtube className="w-5 h-5" />
+            </a>
+            <a href="https://web.facebook.com/people/TheSpinn/61590516704260/" target="_blank" rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-blue-500 transition-colors">
+              <Facebook className="w-5 h-5" />
             </a>
             <a href="https://www.tiktok.com/@zhostofzspinn" target="_blank" rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors">
